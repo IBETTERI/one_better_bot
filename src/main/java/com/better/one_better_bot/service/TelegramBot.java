@@ -2,8 +2,8 @@ package com.better.one_better_bot.service;
 
 
 import com.better.one_better_bot.config.BotConfig;
-//import com.better.one_better_bot.model.User;
-//import com.better.one_better_bot.repository.UserRepository;
+import com.better.one_better_bot.model.User;
+import com.better.one_better_bot.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -25,7 +25,7 @@ import java.util.List;
 public class TelegramBot extends TelegramLongPollingBot {
 
     @Autowired
-    //private UserRepository userRepository;
+    private UserRepository userRepository;
     final BotConfig config;
 
     static final String HELP_TEXT = "This bot is created to demonstrates Spring capabilities.\n\n" +
@@ -82,20 +82,21 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     private void registerUser(Message message) {
-//        if(userRepository.findById(message.getChatId()).isEmpty()){
-//
-//            var chatId = message.getChatId();
-//            var chat = message.getChat();
-//
-//            User user = new User();
-//            user.setChatId(chatId);
-//            user.setFirstName(chat.getFirstName());
-//            user.setLastName(chat.getLastName());
-//            user.setUserName(chat.getUserName());
-//            user.getJoinDate(new Timestamp(System.currentTimeMillis()));
-//            userRepository.save(user);
-//            log.info("user saved: "+ user);
-//        }
+        if(userRepository.findById(message.getChatId()).isEmpty()){
+
+            var chatId = message.getChatId();
+            var chat = message.getChat();
+
+            User user = new User();
+            user.setChatId(chatId);
+            user.setFirstName(chat.getFirstName());
+            user.setLastName(chat.getLastName());
+            user.setUserName(chat.getUserName());
+            user.setJoinDate(new Timestamp(System.currentTimeMillis()));
+
+            userRepository.save(user);
+            log.info("user saved: "+ user);
+        }
     }
 
     private void mydataComand(long chatId, String name){
